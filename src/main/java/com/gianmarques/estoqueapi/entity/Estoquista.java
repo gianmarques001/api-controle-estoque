@@ -9,6 +9,10 @@ import java.util.List;
 @Table(name = "tb_estoquistas")
 public class Estoquista extends Usuario {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Enumerated(EnumType.STRING)
     private EPerfil perfil = EPerfil.ESTOQUISTA;
 
@@ -18,14 +22,12 @@ public class Estoquista extends Usuario {
     public Estoquista() {
     }
 
-    public Estoquista(EPerfil perfil, List<Solicitacao> solicitacoes) {
-        this.perfil = perfil;
-        this.solicitacoes = solicitacoes;
-    }
 
-    public Estoquista(Long id, String nome, String email, String senha, List<Solicitacao> solicitacoes) {
-        super(id, nome, email, senha, EPerfil.ESTOQUISTA);
+
+    public Estoquista(Long id, String nome, String email, String senha, EPerfil perfil, List<Solicitacao> solicitacoes) {
+        super(id, nome, email, senha, perfil);
         this.solicitacoes = solicitacoes;
+        this.id = id;
     }
 
     public List<Solicitacao> getSolicitacoes() {
@@ -36,5 +38,12 @@ public class Estoquista extends Usuario {
         this.solicitacoes = solicitacoes;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
 }

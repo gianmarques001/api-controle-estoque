@@ -27,11 +27,11 @@ public class ProdutoTest {
     @Test
     public void salvarProduto() {
         Produto produto = new Produto();
-        produto.setNome("Sabão em Pó");
-        produto.setDescricao("Sabão em Pó Brilhante");
+        produto.setNome("Sabonete Líquido");
+        produto.setDescricao("Sabonete Líquido 200 ml");
         produto.setCategoria(ECategoriaProduto.LIMPEZA);
-        produto.setQuantidade(20);
-        Float preco = 12F;
+        produto.setQuantidade(25);
+        Float preco = 5F;
         produto.setPreco(preco);
         Optional<Fornecedor> fornecedor = fornecedorRepository.findById(1L);
         produto.setFornecedor(fornecedor.get());
@@ -66,5 +66,19 @@ public class ProdutoTest {
         List<Produto> produtos = produtoRepository.findAllByCategoria(ECategoriaProduto.LIMPEZA);
         produtos.forEach(System.out::println);
 
+    }
+
+    @Test
+    public void editarProduto() {
+        Produto produto = produtoRepository.findById(1L).get();
+        produto.setQuantidade(35);
+        produto.setPreco(12F);
+        produtoRepository.save(produto);
+    }
+
+
+    @Test
+    public void excluirProduto() {
+        produtoRepository.deleteById(1L);
     }
 }

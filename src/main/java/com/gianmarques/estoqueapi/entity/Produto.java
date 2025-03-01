@@ -13,7 +13,7 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(min = 10, max = 20)
+    @Size(min = 5, max = 20)
     @Column(nullable = false)
     private String nome;
 

@@ -4,5 +4,4 @@ public enum EPerfil {
     ADMIN,
     ESTOQUISTA,
     FORNECEDOR,
-    CLIENTE
 }

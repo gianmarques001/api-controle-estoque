@@ -1,15 +1,20 @@
 package com.gianmarques.estoqueapi;
 
 
-import com.gianmarques.estoqueapi.entity.*;
-import com.gianmarques.estoqueapi.entity.enums.EPerfil;
+import com.gianmarques.estoqueapi.entity.Estoquista;
+import com.gianmarques.estoqueapi.entity.Fornecedor;
+import com.gianmarques.estoqueapi.entity.Produto;
+import com.gianmarques.estoqueapi.entity.Solicitacao;
 import com.gianmarques.estoqueapi.entity.enums.EStatusSolicitacao;
-import com.gianmarques.estoqueapi.repository.*;
+import com.gianmarques.estoqueapi.repository.EstoquistaRepository;
+import com.gianmarques.estoqueapi.repository.FornecedorRepository;
+import com.gianmarques.estoqueapi.repository.ProdutoRepository;
+import com.gianmarques.estoqueapi.repository.SolicitacaoRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.*;
+import java.util.List;
 
 @SpringBootTest
 public class SolicitacaoTest {
@@ -23,8 +28,6 @@ public class SolicitacaoTest {
     private EstoquistaRepository estoquistaRepository;
     @Autowired
     private FornecedorRepository fornecedorRepository;
-    @Autowired
-    private UsuarioRepository usuarioRepository;
 
 
     @Test
@@ -38,52 +41,69 @@ public class SolicitacaoTest {
     public void solicitarProduto() {
         Solicitacao solicitacao = new Solicitacao();
         Produto produtoSolicitado = produtoRepository.findById(1L).get();
-        Estoquista estoquista = estoquistaRepository.findById(11L).get();
+        Estoquista estoquista = estoquistaRepository.findById(1L).get();
         solicitacao.setProduto(produtoSolicitado);
-        solicitacao.setQuantidadeSolicitada(2);
+        solicitacao.setQuantidadeSolicitada(5);
         solicitacao.setEstoquista(estoquista);
         solicitacaoRepository.save(solicitacao);
     }
 
-    public void darBaixa(){
-        Solicitacao solicitacao = solicitacaoRepository.findById(1L).get();
-        solicitacao.setStatus(EStatusSolicitacao.FINALIZADO);
-        solicitacaoRepository.save(solicitacao);
-    }
 
     @Test
     public void buscarSolicitacoesFornecedor() {
         Fornecedor fornecedor = fornecedorRepository.findById(1L).get();
         List<Solicitacao> solicitacaos = solicitacaoRepository.buscarPorProdutoPorFornecedor(fornecedor);
         List<Solicitacao> solicitacoesAbertas = solicitacaos.stream().filter(solicitacao -> solicitacao.getStatus().equals(EStatusSolicitacao.SOLICITADO)).toList();
+        solicitacoesAbertas.forEach(System.out::println);
+    }
 
-        solicitacaos.get(0).setQuantidadeAtendida(2);
-        Integer quantidade = solicitacaos.get(0).getProduto().getQuantidade();
-        Integer quantidadeAtendida = 2;
-        System.out.println("QTD" + quantidade);
-        solicitacaos.get(0).getProduto().setQuantidade(quantidade + quantidadeAtendida);
-        System.out.println("QTD DPS" + solicitacaos.get(0).getProduto().getQuantidade());
-        solicitacaos.get(0).setStatus(EStatusSolicitacao.ATENDIDO);
-        produtoRepository.save(solicitacaos.get(0).getProduto());
-        solicitacaoRepository.save(solicitacaos.get(0));
+    @Test
+    public void reporProduto() {
+        // Id da Solicitacao, Qtd Atendida
+        Solicitacao solicitacao = solicitacaoRepository.findById(6L).get();
+        Integer QTD_ATENDIDA = 2;
+        solicitacao.setQuantidadeAtendida(QTD_ATENDIDA);
+        solicitacao.getProduto().setQuantidade(solicitacao.getProduto().getQuantidade() + QTD_ATENDIDA);
+        solicitacao.setStatus(EStatusSolicitacao.ATENDIDO);
+        produtoRepository.save(solicitacao.getProduto());
+        solicitacaoRepository.save(solicitacao);
+    }
+
+    @Test
+    public void reporProduto2() {
+        // Id da Solicitacao, Qtd Atendida
+        Solicitacao solicitacao = solicitacaoRepository.findById(1L).get();
+        Integer QTD_ATENDIDA = 1;
+        solicitacao.setQuantidadeAtendida(QTD_ATENDIDA);
+        produtoRepository.atualizarQtdProduto(solicitacao.getProduto().getId(), solicitacao.getProduto().getQuantidade() + QTD_ATENDIDA);
+        solicitacao.setStatus(EStatusSolicitacao.ATENDIDO);
+        solicitacaoRepository.save(solicitacao);
+    }
+
+
+    @Test
+    public void confirmarSolicitacao() {
+        Solicitacao solicitacao = solicitacaoRepository.findById(6L).get();
+        if (solicitacao.getQuantidadeAtendida() >= solicitacao.getQuantidadeSolicitada()) {
+            solicitacao.setStatus(EStatusSolicitacao.FINALIZADO);
+            solicitacaoRepository.save(solicitacao);
+        } else {
+            throw new RuntimeException("QUANTIDADE ATENDIDA INFERIOR A SOLICITADA");
+        }
+
     }
 
 
 
-
 //    public void comprarProduto() {
-//        Usuario usuario = new Usuario();
-//        Optional<Usuario> usuarioOptional = usuarioRepository.findByPerfil(EPerfil.CLIENTE);
-//        Usuario usuarioAtual = usuarioOptional.get();
-//
 //
 //        Carrinho carrinho = new Carrinho();
-//        carrinho.setUsuario(usuario);
-//
 //        Map<Produto, Integer> produtos = new HashMap<>();
 //
-//        produtos.put(produto1, 1);
+//        Produto produto = produtoRepository.findById(1L).get();
+//        produtos.put(produto, 1);
 //
+//        produtoRepository.atualizarQtdProduto(produto.getId(), produto.getQuantidade() - 1);
 //        carrinho.setProdutos(produtos);
 //        carrinhoRepository.save(carrinho);
 //    }

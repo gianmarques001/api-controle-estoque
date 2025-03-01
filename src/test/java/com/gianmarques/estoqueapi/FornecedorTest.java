@@ -30,7 +30,11 @@ public class FornecedorTest {
         fornecedorRepository.save(fornecedor);
     }
 
-
+    @Test
+    public void listarFornecedores() {
+        List<Fornecedor> fornecedores = fornecedorRepository.findAll();
+        fornecedores.forEach(System.out::println);
+    }
 
     @Test
     public void editarFornecedorPorEmail() {
@@ -42,23 +46,24 @@ public class FornecedorTest {
     }
 
     @Test
-    public void deletarFornecedorPorId(){
+    public void buscarFornecedorPorEmail() {
+        String email = "fornecedor01@gmail.com";
+        Optional<Fornecedor> optionalFornecedor = fornecedorRepository.findByEmail(email);
+        optionalFornecedor.ifPresent(System.out::println);
+
+    }
+
+    @Test
+    public void deletarFornecedorPorId() {
         fornecedorRepository.deleteById(1L);
     }
 
-
-
-    @Test
-    public void listarFornecedores() {
-        List<Fornecedor> fornecedores = fornecedorRepository.findAll();
-        fornecedores.forEach(System.out::println);
-    }
 
     @Test
     public void listarProdutosPorFornecedor() {
         Optional<Fornecedor> fornecedorOptional = fornecedorRepository.findById(1L);
         Fornecedor fornecedor = fornecedorOptional.get();
-        List<Produto> produtos =  produtoRepository.findByFornecedor(fornecedor);
+        List<Produto> produtos = produtoRepository.findByFornecedor(fornecedor);
         fornecedor.setProdutos(produtos);
         fornecedor.getProdutos().forEach(System.out::println);
     }

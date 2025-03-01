@@ -1,4 +1,6 @@
 package com.gianmarques.estoqueapi.dto;
 
-public record ProdutoResponseDto(Long id, String nome) {
+import java.net.URI;
+
+public record ProdutoResponseDto(Long id, String nome, URI url) {
 }

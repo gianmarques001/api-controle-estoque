@@ -6,8 +6,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 
+
 @Entity
-@Table(name = "tb_usuarios")
+@Table(name = "tb_users")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Usuario {
 
@@ -42,13 +43,6 @@ public class Usuario {
         this.perfil = perfil;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getNome() {
         return nome;
@@ -80,6 +74,14 @@ public class Usuario {
 
     public void setPerfil(EPerfil perfil) {
         this.perfil = perfil;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
