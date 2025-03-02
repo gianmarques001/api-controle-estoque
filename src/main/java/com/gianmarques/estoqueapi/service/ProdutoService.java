@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class IProdutoService implements IService<Produto> {
+public class ProdutoService implements IService<Produto> {
 
 
     private final ProdutoRepository produtoRepository;
 
-    public IProdutoService(ProdutoRepository produtoRepository) {
+    public ProdutoService(ProdutoRepository produtoRepository) {
         this.produtoRepository = produtoRepository;
     }
 
