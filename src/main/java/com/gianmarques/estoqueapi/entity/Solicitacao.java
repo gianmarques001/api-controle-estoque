@@ -86,6 +86,7 @@ public class Solicitacao {
     }
 
     public void setQuantidadeAtendida(Integer quantidadeAtendida) {
+    
         this.quantidadeAtendida = quantidadeAtendida;
     }
 

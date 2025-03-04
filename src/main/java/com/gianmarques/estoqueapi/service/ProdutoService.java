@@ -1,6 +1,9 @@
 package com.gianmarques.estoqueapi.service;
 
+import com.gianmarques.estoqueapi.entity.Fornecedor;
 import com.gianmarques.estoqueapi.entity.Produto;
+import com.gianmarques.estoqueapi.exception.exceptions.EntidadeNaoEncontradaException;
+import com.gianmarques.estoqueapi.exception.exceptions.ProdutoDuplicadoException;
 import com.gianmarques.estoqueapi.repository.ProdutoRepository;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProdutoService implements IService<Produto> {
+public class ProdutoService implements GenericService<Produto> {
 
 
     private final ProdutoRepository produtoRepository;
@@ -19,6 +22,19 @@ public class ProdutoService implements IService<Produto> {
 
     @Override
     public Produto salvar(Produto produto) {
+        String categoriaProduto = produto.getCategoria().toString();
+        String nomeProduto = produto.getNome();
+
+        Fornecedor fornecedor = produto.getFornecedor();
+       // List<Produto> produtos = produtoRepository.findByFornecedor(fornecedor);
+        List<Produto> produtos = listar();
+        produtos.forEach(p -> {
+            if (p.getCategoria().toString().equals(categoriaProduto) && p.getNome().equalsIgnoreCase(nomeProduto)){
+                throw new ProdutoDuplicadoException("Produto Duplicado");
+            }
+        });
+
+
         return produtoRepository.save(produto);
     }
 
@@ -30,23 +46,26 @@ public class ProdutoService implements IService<Produto> {
 
     @Override
     public Produto editarPorId(Long id, Produto novoProduto) {
-        Optional<Produto> produto = buscarPorId(id);
-        Produto produtoSalvo = produto.get();
-        produtoSalvo.setQuantidade(novoProduto.getQuantidade());
-        produtoSalvo.setPreco(novoProduto.getPreco());
-        return produtoRepository.save(produtoSalvo);
+        Optional<Produto> optionalProduto = Optional.of(buscarPorId(id).orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrado.")));
+        Produto produtoAtualizado = editarProduto(novoProduto, optionalProduto.get());
+        return produtoRepository.save(produtoAtualizado);
+    }
+
+    private Produto editarProduto(Produto novoProduto, Produto antigoProduto) {
+        antigoProduto.setQuantidade(novoProduto.getQuantidade());
+        antigoProduto.setPreco(novoProduto.getPreco());
+        return antigoProduto;
     }
 
     @Override
     public Optional<Produto> buscarPorId(Long id) {
-        return produtoRepository.findById(id);
+        return Optional.ofNullable(produtoRepository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrado.")));
     }
 
     @Override
     public void deletarPorId(Long id) {
-        produtoRepository.deleteById(id);
+        buscarPorId(id).ifPresent(produtoRepository::delete);
     }
-
 
 
 }

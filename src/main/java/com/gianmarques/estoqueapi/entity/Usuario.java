@@ -3,7 +3,6 @@ package com.gianmarques.estoqueapi.entity;
 
 import com.gianmarques.estoqueapi.entity.enums.EPerfil;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 
 
@@ -16,16 +15,16 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(min = 5, max = 20)
-    @Column(nullable = false)
+
+    @Column(nullable = false, length = 20)
     private String nome;
 
-    @Email
+
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Size(min = 8, max = 100)
-    @Column(nullable = false)
+
+    @Column(nullable = false, length = 50)
     private String senha;
 
     @Enumerated(EnumType.STRING)
@@ -33,6 +32,13 @@ public class Usuario {
     private EPerfil perfil;
 
     public Usuario() {
+    }
+
+    public Usuario(Long id, String nome, String email, String senha) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
     }
 
     public Usuario(Long id, String nome, String email, String senha, EPerfil perfil) {

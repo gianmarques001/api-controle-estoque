@@ -13,18 +13,15 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(min = 5, max = 20)
     @Column(nullable = false)
     private String nome;
 
-    @Size(min = 10, max = 40)
     @Column(nullable = false)
     private String descricao;
 
     @Column(nullable = false)
     private Float preco;
 
-    @Min(1)
     @Column(nullable = false)
     private Integer quantidade;
 
@@ -117,7 +114,6 @@ public class Produto {
                 ", preco=" + preco +
                 ", quantidade=" + quantidade +
                 ", categoria=" + categoria +
-
                 '}';
     }
 }

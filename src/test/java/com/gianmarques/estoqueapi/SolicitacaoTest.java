@@ -61,6 +61,7 @@ public class SolicitacaoTest {
     public void reporProduto() {
         // Id da Solicitacao, Qtd Atendida
         Solicitacao solicitacao = solicitacaoRepository.findById(6L).get();
+
         Integer QTD_ATENDIDA = 2;
         solicitacao.setQuantidadeAtendida(QTD_ATENDIDA);
         solicitacao.getProduto().setQuantidade(solicitacao.getProduto().getQuantidade() + QTD_ATENDIDA);
@@ -69,14 +70,58 @@ public class SolicitacaoTest {
         solicitacaoRepository.save(solicitacao);
     }
 
+
     @Test
     public void reporProduto2() {
         // Id da Solicitacao, Qtd Atendida
         Solicitacao solicitacao = solicitacaoRepository.findById(1L).get();
         Integer QTD_ATENDIDA = 1;
         solicitacao.setQuantidadeAtendida(QTD_ATENDIDA);
-        produtoRepository.atualizarQtdProduto(solicitacao.getProduto().getId(), solicitacao.getProduto().getQuantidade() + QTD_ATENDIDA);
         solicitacao.setStatus(EStatusSolicitacao.ATENDIDO);
+        produtoRepository.atualizarQtdProduto(solicitacao.getProduto().getId(), solicitacao.getProduto().getQuantidade() + QTD_ATENDIDA);
+        solicitacaoRepository.save(solicitacao);
+    }
+
+
+    @Test
+    public void reporProduto3() {
+        // Id da Solicitacao, Qtd Atendida
+        Solicitacao solicitacao = solicitacaoRepository.findById(6L).get();
+        Integer QTD_ATENDIDA = 2;
+        atualizarProduto(solicitacao, QTD_ATENDIDA);
+        salvarSolicitacao(solicitacao);
+    }
+
+    private void atualizarProduto(Solicitacao solicitacao, Integer QTD_ATENDIDA) {
+        solicitacao.setQuantidadeAtendida(QTD_ATENDIDA);
+        Produto produto = solicitacao.getProduto();
+        produto.setQuantidade(produto.getQuantidade() + QTD_ATENDIDA);
+        solicitacao.setStatus(EStatusSolicitacao.ATENDIDO);
+    }
+
+    private void salvarSolicitacao(Solicitacao solicitacao) {
+        produtoRepository.save(solicitacao.getProduto());
+        solicitacaoRepository.save(solicitacao);
+    }
+
+
+    @Test
+    public void reporProduto4() {
+        // Id da Solicitacao, Qtd Atendida
+        Solicitacao solicitacao = solicitacaoRepository.findById(1L).get();
+        Integer QTD_ATENDIDA = 1;
+        atualizarSolicitacao(solicitacao, QTD_ATENDIDA);
+        salvarSolicitacao2(solicitacao);
+    }
+
+    private void atualizarSolicitacao(Solicitacao solicitacao, Integer QTD_ATENDIDA) {
+        solicitacao.setQuantidadeAtendida(QTD_ATENDIDA);
+        Produto produto = solicitacao.getProduto();
+        produtoRepository.atualizarQtdProduto(produto.getId(), produto.getQuantidade() + QTD_ATENDIDA);
+        solicitacao.setStatus(EStatusSolicitacao.ATENDIDO);
+    }
+
+    private void salvarSolicitacao2(Solicitacao solicitacao) {
         solicitacaoRepository.save(solicitacao);
     }
 
@@ -92,7 +137,6 @@ public class SolicitacaoTest {
         }
 
     }
-
 
 
 //    public void comprarProduto() {

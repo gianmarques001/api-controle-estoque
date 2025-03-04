@@ -1,61 +1,51 @@
 package com.gianmarques.estoqueapi.controller;
 
-import com.gianmarques.estoqueapi.dto.ProdutoRequestDto;
-import com.gianmarques.estoqueapi.dto.ProdutoResponseDto;
+import com.gianmarques.estoqueapi.dto.produto.ProdutoDetailsResponseDTO;
+import com.gianmarques.estoqueapi.dto.produto.ProdutoRequestDTO;
+import com.gianmarques.estoqueapi.dto.produto.ProdutoResponseDTO;
+import com.gianmarques.estoqueapi.dto.produto.ProdutoUpdateRequestDTO;
 import com.gianmarques.estoqueapi.entity.Produto;
-import com.gianmarques.estoqueapi.entity.enums.ECategoriaProduto;
+import com.gianmarques.estoqueapi.mapper.ProdutoMapper;
 import com.gianmarques.estoqueapi.service.ProdutoService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/produtos")
 public class ProdutoController {
 
     private final ProdutoService produtoService;
+    private final ProdutoMapper produtoMapper;
 
-    public ProdutoController(ProdutoService produtoService) {
+    public ProdutoController(ProdutoService produtoService, ProdutoMapper produtoMapper) {
         this.produtoService = produtoService;
+        this.produtoMapper = produtoMapper;
     }
 
     @GetMapping
-    public ResponseEntity<List<Produto>> listar() {
-        return ResponseEntity.ok(produtoService.listar());
+    public ResponseEntity<List<ProdutoResponseDTO>> listar() {
+        return ResponseEntity.ok(produtoService.listar().stream().map(produtoMapper::toDTO).toList());
     }
 
     @PostMapping
-    public ResponseEntity<ProdutoResponseDto> salvar(@RequestBody ProdutoRequestDto produtoRequestDto) {
-
-        Produto produto = new Produto();
-        produto.setNome(produtoRequestDto.nome());
-        produto.setDescricao(produtoRequestDto.descricao());
-        produto.setQuantidade(produtoRequestDto.quantidade());
-        produto.setPreco(produtoRequestDto.preco());
-        produto.setFornecedor(null);
-        produto.setCategoria(ECategoriaProduto.valueOf(produtoRequestDto.categoria()));
-        Produto produtoSalvo = produtoService.salvar(produto);
-
+    public ResponseEntity<ProdutoResponseDTO> salvar(@Valid @RequestBody ProdutoRequestDTO produtoRequestDto) {
+        Produto produtoSalvo = produtoService.salvar(produtoMapper.toEntity(produtoRequestDto));
         URI url = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(produtoSalvo.getId())
                 .toUri();
-
-        ProdutoResponseDto responseDto = new ProdutoResponseDto(produtoSalvo.getId(), produtoSalvo.getNome(), url);
-        return ResponseEntity.created(url).body(responseDto);
+        return ResponseEntity.created(url).body(produtoMapper.toDTO(produtoSalvo));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
-        Optional<Produto> produto = produtoService.buscarPorId(id);
-        if (produto.isPresent()) {
-            return ResponseEntity.ok(produto.get());
-        }
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ProdutoDetailsResponseDTO> buscarPorId(@PathVariable Long id) {
+        Produto produto = produtoService.buscarPorId(id).get();
+        return ResponseEntity.ok(produtoMapper.toDetailsDTO(produto));
     }
 
     @DeleteMapping("/{id}")
@@ -65,10 +55,9 @@ public class ProdutoController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Produto> atualizarPorId(@PathVariable Long id, @RequestBody Produto produtoRequestDto) {
-        Produto produtoAtualizado = produtoService.editarPorId(id, produtoRequestDto);
-
-        return ResponseEntity.ok().body(produtoAtualizado);
+    public ResponseEntity<ProdutoDetailsResponseDTO> atualizarPorId(@PathVariable Long id, @Valid @RequestBody ProdutoUpdateRequestDTO produtoRequestDto) {
+        Produto produtoAtualizado = produtoService.editarPorId(id, produtoMapper.toEntity(produtoRequestDto));
+        return ResponseEntity.ok().body(produtoMapper.toDetailsDTO(produtoAtualizado));
     }
 
 }

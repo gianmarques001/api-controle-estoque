@@ -2,8 +2,6 @@ package com.gianmarques.estoqueapi.entity;
 
 import com.gianmarques.estoqueapi.entity.enums.EPerfil;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
@@ -15,15 +13,15 @@ public class Fornecedor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String nome;
 
-    @Email
+
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Size(min = 8, max = 100)
-    @Column(nullable = false)
+
+    @Column(nullable = false, length = 50)
     private String senha;
 
     @Column(nullable = false, unique = true)

@@ -24,8 +24,8 @@ public class Estoquista extends Usuario {
 
 
 
-    public Estoquista(Long id, String nome, String email, String senha, EPerfil perfil, List<Solicitacao> solicitacoes) {
-        super(id, nome, email, senha, perfil);
+    public Estoquista(Long id, String nome, String email, String senha,  List<Solicitacao> solicitacoes) {
+        super(id, nome, email, senha);
         this.solicitacoes = solicitacoes;
         this.id = id;
     }
