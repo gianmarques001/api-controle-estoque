@@ -1,14 +1,21 @@
 package com.gianmarques.estoqueapi.entity;
 
 
-import com.gianmarques.estoqueapi.entity.enums.EPerfil;
+import com.gianmarques.estoqueapi.entity.enums.ERole;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 
 @Entity
-@Table(name = "tb_users")
+@Table(name = "tb_usuarios")
 @Inheritance(strategy = InheritanceType.JOINED)
+@EntityListeners(AuditingEntityListener.class)
 public class Usuario {
 
     @Id
@@ -24,12 +31,30 @@ public class Usuario {
     private String email;
 
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 70)
     private String senha;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private EPerfil perfil;
+    private ERole perfil;
+
+
+    @CreatedDate
+    @Column(name = "data_criacao")
+    private LocalDateTime dataCriacao;
+
+    @LastModifiedDate
+    @Column(name = "data_modificacao")
+    private LocalDateTime dataMoficacao;
+
+    @CreatedBy
+    @Column(name = "criado_por")
+    private String criadoPor;
+
+    @LastModifiedBy
+    @Column(name = "modificado_por")
+    private String modificadoPor;
+
 
     public Usuario() {
     }
@@ -41,7 +66,7 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public Usuario(Long id, String nome, String email, String senha, EPerfil perfil) {
+    public Usuario(Long id, String nome, String email, String senha, ERole perfil) {
         this.id = id;
         this.nome = nome;
         this.email = email;
@@ -49,6 +74,16 @@ public class Usuario {
         this.perfil = perfil;
     }
 
+    public Usuario(Long id, String nome, String email, String senha, LocalDateTime dataCriacao, LocalDateTime dataMoficacao, String criadoPor, String modificadoPor) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+        this.dataCriacao = dataCriacao;
+        this.dataMoficacao = dataMoficacao;
+        this.criadoPor = criadoPor;
+        this.modificadoPor = modificadoPor;
+    }
 
     public String getNome() {
         return nome;
@@ -74,11 +109,11 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public EPerfil getPerfil() {
+    public ERole getPerfil() {
         return perfil;
     }
 
-    public void setPerfil(EPerfil perfil) {
+    public void setPerfil(ERole perfil) {
         this.perfil = perfil;
     }
 
@@ -88,6 +123,39 @@ public class Usuario {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDateTime dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
+
+    public LocalDateTime getDataMoficacao() {
+        return dataMoficacao;
+    }
+
+    public void setDataMoficacao(LocalDateTime dataMoficacao) {
+        this.dataMoficacao = dataMoficacao;
+    }
+
+    public String getCriadoPor() {
+        return criadoPor;
+    }
+
+    public void setCriadoPor(String criadoPor) {
+        this.criadoPor = criadoPor;
+    }
+
+    public String getModificadoPor() {
+        return modificadoPor;
+    }
+
+    public void setModificadoPor(String modificadoPor) {
+        this.modificadoPor = modificadoPor;
     }
 
     @Override

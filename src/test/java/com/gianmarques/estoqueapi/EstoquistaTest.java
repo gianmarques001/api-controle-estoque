@@ -2,8 +2,7 @@ package com.gianmarques.estoqueapi;
 
 
 import com.gianmarques.estoqueapi.entity.Estoquista;
-import com.gianmarques.estoqueapi.entity.Fornecedor;
-import com.gianmarques.estoqueapi.entity.enums.EPerfil;
+import com.gianmarques.estoqueapi.entity.enums.ERole;
 import com.gianmarques.estoqueapi.repository.EstoquistaRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ public class EstoquistaTest {
         estoquista.setNome("Estoquista 01");
         estoquista.setEmail("estoquista01@gmail.com");
         estoquista.setSenha("123456789");
-        estoquista.setPerfil(EPerfil.ESTOQUISTA);
+        estoquista.setPerfil(ERole.ROLE_ESTOQUISTA);
         estoquistaRepository.save(estoquista);
     }
 

@@ -2,7 +2,7 @@ package com.gianmarques.estoqueapi;
 
 
 import com.gianmarques.estoqueapi.entity.Usuario;
-import com.gianmarques.estoqueapi.entity.enums.EPerfil;
+import com.gianmarques.estoqueapi.entity.enums.ERole;
 import com.gianmarques.estoqueapi.repository.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class UsuarioTest {
         usuario.setNome("Gian Marques");
         usuario.setEmail("usuario@gmail.com");
         usuario.setSenha("12345678");
-        usuario.setPerfil(EPerfil.ADMIN);
+        usuario.setPerfil(ERole.ROLE_ADMIN);
         usuarioRepository.save(usuario);
     }
 

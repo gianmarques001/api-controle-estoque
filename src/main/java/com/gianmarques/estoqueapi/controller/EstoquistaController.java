@@ -7,6 +7,7 @@ import com.gianmarques.estoqueapi.mapper.EstoquistaMapper;
 import com.gianmarques.estoqueapi.service.EstoquistaService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -26,13 +27,16 @@ public class EstoquistaController {
         this.estoquistaMapper = estoquistaMapper;
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    private ResponseEntity<List<EstoquistaResponseDTO>> listar() {
+    public ResponseEntity<List<EstoquistaResponseDTO>> listar() {
         List<EstoquistaResponseDTO> estoquistas = estoquistaService.listar().stream().map(estoquistaMapper::toDTO).collect(Collectors.toList());
         return ResponseEntity.ok(estoquistas);
     }
 
+
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<EstoquistaResponseDTO> salvar(@Valid @RequestBody EstoquistaRequestDTO estoquistaRequestDTO) {
         Estoquista estoquistaSalvo = estoquistaService.salvar(estoquistaMapper.toEntity(estoquistaRequestDTO));
@@ -44,6 +48,7 @@ public class EstoquistaController {
         return ResponseEntity.created(url).body(estoquistaMapper.toDTO(estoquistaSalvo));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<EstoquistaResponseDTO> buscarPorId(@PathVariable Long id) {
         Estoquista estoquista = estoquistaService.buscarPorId(id).get();
@@ -51,6 +56,7 @@ public class EstoquistaController {
 
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarPorId(@PathVariable Long id) {
         estoquistaService.deletarPorId(id);

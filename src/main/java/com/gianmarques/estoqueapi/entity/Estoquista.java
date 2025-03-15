@@ -1,6 +1,6 @@
 package com.gianmarques.estoqueapi.entity;
 
-import com.gianmarques.estoqueapi.entity.enums.EPerfil;
+import com.gianmarques.estoqueapi.entity.enums.ERole;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public class Estoquista extends Usuario {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private EPerfil perfil = EPerfil.ESTOQUISTA;
+    private ERole perfil = ERole.ROLE_ESTOQUISTA;
 
     @OneToMany(mappedBy = "estoquista")
     private List<Solicitacao> solicitacoes;

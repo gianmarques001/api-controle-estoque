@@ -4,9 +4,17 @@ import com.gianmarques.estoqueapi.entity.enums.ECategoriaProduto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tb_produtos")
+@EntityListeners(AuditingEntityListener.class)
 public class Produto {
 
     @Id
@@ -34,6 +42,23 @@ public class Produto {
     @JoinColumn(name = "id_fornecedor")
     private Fornecedor fornecedor;
 
+    @CreatedDate
+    @Column(name = "data_criacao")
+    private LocalDateTime dataCriacao;
+
+    @LastModifiedDate
+    @Column(name = "data_modificacao")
+    private LocalDateTime dataMoficacao;
+
+    @CreatedBy
+    @Column(name = "criado_por")
+    private String criadoPor;
+
+    @LastModifiedBy
+    @Column(name = "modificado_por")
+    private String modificadoPor;
+
+
 
 
     public Produto() {
@@ -47,6 +72,20 @@ public class Produto {
         this.quantidade = quantidade;
         this.categoria = categoria;
         this.fornecedor = fornecedor;
+    }
+
+    public Produto(Long id, String nome, String descricao, Float preco, Integer quantidade, ECategoriaProduto categoria, Fornecedor fornecedor, LocalDateTime dataCriacao, LocalDateTime dataMoficacao, String criadoPor, String modificadoPor) {
+        this.id = id;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.preco = preco;
+        this.quantidade = quantidade;
+        this.categoria = categoria;
+        this.fornecedor = fornecedor;
+        this.dataCriacao = dataCriacao;
+        this.dataMoficacao = dataMoficacao;
+        this.criadoPor = criadoPor;
+        this.modificadoPor = modificadoPor;
     }
 
     public Long getId() {
@@ -103,6 +142,38 @@ public class Produto {
 
     public void setFornecedor(Fornecedor fornecedor) {
         this.fornecedor = fornecedor;
+    }
+
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDateTime dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
+
+    public LocalDateTime getDataMoficacao() {
+        return dataMoficacao;
+    }
+
+    public void setDataMoficacao(LocalDateTime dataMoficacao) {
+        this.dataMoficacao = dataMoficacao;
+    }
+
+    public String getCriadoPor() {
+        return criadoPor;
+    }
+
+    public void setCriadoPor(String criadoPor) {
+        this.criadoPor = criadoPor;
+    }
+
+    public String getModificadoPor() {
+        return modificadoPor;
+    }
+
+    public void setModificadoPor(String modificadoPor) {
+        this.modificadoPor = modificadoPor;
     }
 
     @Override
