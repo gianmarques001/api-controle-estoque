@@ -19,8 +19,6 @@ import java.util.List;
 
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
-    @Query("select p from Produto p")
-    Page<ProdutoProjection> findAllPageable(Pageable pageable);
 
     @Query("select p from Produto p")
     Page<ProdutoListProjection> findAllPageableEstoque(Pageable pageable);
@@ -36,7 +34,8 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
     List<Produto> findAllByCategoria(ECategoriaProduto categoria);
 
-    List<Produto> findAllByNome(@Size(min = 10, max = 20) String nome);
+
+
 
     @Transactional
     @Modifying

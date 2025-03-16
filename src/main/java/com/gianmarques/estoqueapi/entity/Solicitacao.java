@@ -6,11 +6,13 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tb_solicitacoes")
+@EntityListeners(AuditingEntityListener.class)
 public class Solicitacao {
 
     @Id
@@ -126,7 +128,7 @@ public class Solicitacao {
     }
 
     public LocalDateTime getDataCriacao() {
-        return dataCriacao;
+        return this.dataCriacao;
     }
 
     public void setDataCriacao(LocalDateTime dataCriacao) {
@@ -134,7 +136,7 @@ public class Solicitacao {
     }
 
     public LocalDateTime getDataMoficacao() {
-        return dataMoficacao;
+        return this.dataMoficacao;
     }
 
     public void setDataMoficacao(LocalDateTime dataMoficacao) {
@@ -142,7 +144,7 @@ public class Solicitacao {
     }
 
     public String getCriadoPor() {
-        return criadoPor;
+        return this.criadoPor;
     }
 
     public void setCriadoPor(String criadoPor) {
@@ -150,7 +152,7 @@ public class Solicitacao {
     }
 
     public String getModificadoPor() {
-        return modificadoPor;
+        return this.modificadoPor;
     }
 
     public void setModificadoPor(String modificadoPor) {

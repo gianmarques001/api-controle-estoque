@@ -3,6 +3,7 @@ package com.gianmarques.estoqueapi.controller;
 import com.gianmarques.estoqueapi.dto.produto.*;
 import com.gianmarques.estoqueapi.entity.Produto;
 import com.gianmarques.estoqueapi.mapper.ProdutoMapper;
+import com.gianmarques.estoqueapi.repository.pageable.GenericPageable;
 import com.gianmarques.estoqueapi.repository.projection.ProdutoListProjection;
 import com.gianmarques.estoqueapi.repository.projection.ProdutoProjection;
 import com.gianmarques.estoqueapi.security.jwt.JwtUserDetails;
@@ -35,7 +36,7 @@ public class ProdutoController {
 
     @PreAuthorize("hasRole('ESTOQUISTA')")
     @GetMapping
-    public ResponseEntity<ProdutoPageableResponse> listarProdutos(@PageableDefault(size = 5, direction = Sort.Direction.ASC) Pageable pageable, @RequestParam(required = false) Boolean emFalta) {
+    public ResponseEntity<GenericPageable> listarProdutos(@PageableDefault(size = 5, direction = Sort.Direction.ASC) Pageable pageable, @RequestParam(required = false) Boolean emFalta) {
         Page<ProdutoListProjection> produtoProjections = produtoService.listar(pageable, emFalta);
         return ResponseEntity.ok(produtoMapper.toListPageableDTO(produtoProjections));
     }
@@ -43,7 +44,7 @@ public class ProdutoController {
 
     @PreAuthorize("hasRole('FORNECEDOR')")
     @GetMapping("/fornecedor")
-    public ResponseEntity<ProdutoPageableResponse> listar(@PageableDefault(size = 5, direction = Sort.Direction.ASC) @AuthenticationPrincipal JwtUserDetails jwtUserDetails, Pageable pageable) {
+    public ResponseEntity<GenericPageable> listar(@PageableDefault(size = 5, direction = Sort.Direction.ASC) @AuthenticationPrincipal JwtUserDetails jwtUserDetails, Pageable pageable) {
         Page<ProdutoProjection> produtos = produtoService.listar(pageable, jwtUserDetails.getId());
         return ResponseEntity.ok(produtoMapper.toPageableDTO(produtos));
     }

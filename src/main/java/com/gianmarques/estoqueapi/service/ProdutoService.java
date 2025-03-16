@@ -40,26 +40,18 @@ public class ProdutoService {
 
     public Produto salvar(Produto produto, Long idFornececdor) {
         String categoriaProduto = produto.getCategoria().toString();
-        String nomeProduto = produto.getNome();
         Fornecedor fornecedor = getFornecedor(idFornececdor);
         produto.setFornecedor(fornecedor);
         List<Produto> produtos = getProdutosByFornecedor(fornecedor);
 
         produtos.forEach(p -> {
-            if (p.getCategoria().toString().equals(categoriaProduto) && p.getNome().equalsIgnoreCase(nomeProduto)) {
+            if (p.getCategoria().toString().equals(categoriaProduto) && p.getNome().equalsIgnoreCase(produto.getNome())) {
                 throw new ProdutoDuplicadoException("Produto Duplicado");
             }
         });
 
         return produtoRepository.save(produto);
     }
-
-
-    // Método Antigo
-//    public List<Produto> listar(Long id) {
-//        Fornecedor fornecedor = getFornecedor(id);
-//        return getProdutosByFornecedor(fornecedor);
-//    }
 
     public Page<ProdutoProjection> listar(Pageable pageable, Long id) {
         Fornecedor fornecedor = getFornecedor(id);
@@ -68,11 +60,9 @@ public class ProdutoService {
         return produtoByFornecedor;
     }
 
-    // Estoquista
     public Page<ProdutoListProjection> listar(Pageable pageable, Boolean emFalta) {
         if (emFalta != null) {
             return produtoRepository.findAllPageableByQuantidadeGreaterThanEqual(pageable, QTD_PRODUTOS);
-
         }
         return produtoRepository.findAllPageableEstoque(pageable);
     }
@@ -87,6 +77,15 @@ public class ProdutoService {
         return optionalProduto;
     }
 
+    public Produto buscarPorId(Long idProduto) {
+        Optional<Produto> optionalProduto = produtoRepository.findById(idProduto);
+        if (optionalProduto.isEmpty()) {
+            throw new EntidadeNaoEncontradaException("Produto não encontrado");
+        }
+        return optionalProduto.get();
+    }
+
+
 
     public Produto editarPorId(Long idProduto, Long idFornecedor, Produto novoProduto) {
         Optional<Produto> optionalProduto = buscarPorId(idProduto, idFornecedor);
@@ -95,11 +94,11 @@ public class ProdutoService {
     }
 
     private Produto editarProduto(Produto novoProduto, Produto antigoProduto) {
+        System.out.println("QTD Produto novo " + novoProduto.getQuantidade());
         antigoProduto.setQuantidade(novoProduto.getQuantidade());
         antigoProduto.setPreco(novoProduto.getPreco());
         return antigoProduto;
     }
-
 
     @Transactional
     public void deletarPorId(Long idProduto, Long idFornecedor) {

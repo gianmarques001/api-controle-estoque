@@ -71,5 +71,4 @@ public class FornecedorController {
         return ResponseEntity.ok().body(fornecedorMapper.toDetailsDTO(fornecedorAtualizado));
     }
 
-
 }
