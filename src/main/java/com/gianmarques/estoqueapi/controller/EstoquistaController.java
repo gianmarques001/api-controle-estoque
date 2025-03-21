@@ -34,13 +34,10 @@ public class EstoquistaController {
         return ResponseEntity.ok(estoquistas);
     }
 
-
-
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<EstoquistaResponseDTO> salvar(@Valid @RequestBody EstoquistaRequestDTO estoquistaRequestDTO) {
         Estoquista estoquistaSalvo = estoquistaService.salvar(estoquistaMapper.toEntity(estoquistaRequestDTO));
-
         URI url = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(estoquistaSalvo.getId())

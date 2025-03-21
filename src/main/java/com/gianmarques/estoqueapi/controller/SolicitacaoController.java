@@ -25,7 +25,6 @@ import java.util.Map;
 @RequestMapping("/api/v1/solicitacoes")
 public class SolicitacaoController {
 
-
     private final SolicitacaoService solicitacaoService;
     private final SolicitacaoMapper solicitacaoMapper;
     private final GenericMapper genericMapper;
@@ -50,7 +49,6 @@ public class SolicitacaoController {
     public ResponseEntity<GenericPageable> listar(Pageable pageable) {
         Page<SolicitacaoListProjection> solicitacoes = solicitacaoService.listar(pageable);
         return ResponseEntity.ok(genericMapper.toListPageableDTO(solicitacoes));
-
     }
 
     @PreAuthorize("hasRole('FORNECEDOR')")
@@ -66,6 +64,7 @@ public class SolicitacaoController {
         solicitacaoService.atualizarSolicitacao(id, jwtUserDetails.getId(), produtoMapper.toEntity(produtoUpdateRequestDTO));
         return ResponseEntity.ok().build();
     }
+
     @PreAuthorize("hasRole('ESTOQUISTA')")
     @PatchMapping("/baixa")
     public ResponseEntity<?> atualizarSolicitacao() {

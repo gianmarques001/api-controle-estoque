@@ -50,8 +50,8 @@ public class JwtUserDetailsService implements UserDetailsService {
             return new JwtUserDetails(fornecedor);
         }
         throw new UsernameNotFoundException("Usuário não encontrado.");
-
     }
+
     public JwtToken getAuthenticatedToken(String email) {
         return JwtUtils.criarToken(email, perfil.substring("ROLE_".length()));
     }

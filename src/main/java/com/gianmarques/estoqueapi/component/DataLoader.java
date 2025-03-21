@@ -31,7 +31,5 @@ public class DataLoader implements CommandLineRunner {
             usuarioAdmin.setSenha(passwordEncoder.encode("12345678"));
             usuarioRepository.save(usuarioAdmin);
         }
-
-
     }
 }

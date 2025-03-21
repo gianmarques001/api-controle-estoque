@@ -26,7 +26,6 @@ public class FornecedorController {
     private final FornecedorService fornecedorService;
     private final FornecedorMapper fornecedorMapper;
 
-
     public FornecedorController(FornecedorService fornecedorService, FornecedorMapper fornecedorMapper) {
         this.fornecedorService = fornecedorService;
         this.fornecedorMapper = fornecedorMapper;

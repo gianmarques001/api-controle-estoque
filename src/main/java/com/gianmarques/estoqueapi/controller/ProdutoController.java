@@ -32,8 +32,7 @@ public class ProdutoController {
         this.produtoService = produtoService;
         this.produtoMapper = produtoMapper;
     }
-
-
+    
     @PreAuthorize("hasRole('ESTOQUISTA')")
     @GetMapping
     public ResponseEntity<GenericPageable> listarProdutos(@PageableDefault(size = 5, direction = Sort.Direction.ASC) Pageable pageable, @RequestParam(required = false) Boolean emFalta) {

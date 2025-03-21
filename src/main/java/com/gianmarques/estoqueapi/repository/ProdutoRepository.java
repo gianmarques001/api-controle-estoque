@@ -7,7 +7,6 @@ import com.gianmarques.estoqueapi.repository.projection.ProdutoListProjection;
 import com.gianmarques.estoqueapi.repository.projection.ProdutoProjection;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,9 +32,6 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     List<Produto> findAllByQuantidadeGreaterThanEqual(@Min(1) Integer quantidadeIsGreaterThan);
 
     List<Produto> findAllByCategoria(ECategoriaProduto categoria);
-
-
-
 
     @Transactional
     @Modifying

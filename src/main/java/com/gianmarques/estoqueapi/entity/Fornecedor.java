@@ -24,17 +24,14 @@ public class Fornecedor {
     @Column(nullable = false, length = 20)
     private String nome;
 
-
     @Column(nullable = false, unique = true)
     private String email;
-
 
     @Column(nullable = false, length = 100)
     private String senha;
 
     @Column(nullable = false, unique = true)
     private String telefone;
-
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -43,7 +40,6 @@ public class Fornecedor {
     @JsonIgnore
     @OneToMany(mappedBy = "fornecedor")
     private List<Produto> produtos;
-
 
     @CreatedDate
     @Column(name = "data_criacao")
