@@ -1,7 +1,8 @@
 # 📦 API de Controle de Estoque
 
-Projeto pessoal desenvolvido com **Spring Boot** com o objetivo de criar uma API REST para gerenciamento de estoque de produtos e fornecedores.  
-Além de aprofundar conhecimentos em **Spring**, o projeto aborda conceitos importantes de segurança, boas práticas em APIs.
+Projeto pessoal desenvolvido com Spring Boot, com o objetivo de criar uma API REST para o gerenciamento de estoque de produtos e fornecedores. Além de aprofundar os conhecimentos em Spring, o projeto também aborda conceitos importantes de segurança e boas práticas no desenvolvimento de APIs.
+
+A API foi projetada para oferecer uma solução prática e eficiente para o controle de inventário por fornecedores e estoquistas. Cada fornecedor possui total autonomia sobre seus próprios produtos, podendo adicionar, editar, listar ou remover itens do seu catálogo por meio de endpoints intuitivos. Já os estoquistas contam com funcionalidades específicas que permitem consultar a lista de fornecedores, buscar por ID, visualizar o estoque completo e solicitar a reposição de produtos em baixa.
 
 ---
 
