@@ -1,6 +1,6 @@
 package com.gianmarques.estoqueapi.entity;
 
-import com.gianmarques.estoqueapi.entity.enums.EStatusSolicitacao;
+import com.gianmarques.estoqueapi.entity.enums.StatusSolicitacao;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -29,7 +29,7 @@ public class Solicitacao {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private EStatusSolicitacao status = EStatusSolicitacao.SOLICITADO;
+    private StatusSolicitacao status = StatusSolicitacao.SOLICITADO;
 
     @Column(nullable = false)
     private Integer quantidadeSolicitada;
@@ -57,7 +57,7 @@ public class Solicitacao {
     public Solicitacao() {
     }
 
-    public Solicitacao(Long id, Estoquista estoquista, Produto produto, EStatusSolicitacao status, Integer quantidadeSolicitada, Integer quantidadeAtendida) {
+    public Solicitacao(Long id, Estoquista estoquista, Produto produto, StatusSolicitacao status, Integer quantidadeSolicitada, Integer quantidadeAtendida) {
         this.id = id;
         this.estoquista = estoquista;
         this.produto = produto;
@@ -66,18 +66,6 @@ public class Solicitacao {
         this.quantidadeAtendida = quantidadeAtendida;
     }
 
-    public Solicitacao(Long id, Estoquista estoquista, Produto produto, EStatusSolicitacao status, Integer quantidadeSolicitada, Integer quantidadeAtendida, LocalDateTime dataCriacao, LocalDateTime dataMoficacao, String criadoPor, String modificadoPor) {
-        this.id = id;
-        this.estoquista = estoquista;
-        this.produto = produto;
-        this.status = status;
-        this.quantidadeSolicitada = quantidadeSolicitada;
-        this.quantidadeAtendida = quantidadeAtendida;
-        this.dataCriacao = dataCriacao;
-        this.dataMoficacao = dataMoficacao;
-        this.criadoPor = criadoPor;
-        this.modificadoPor = modificadoPor;
-    }
 
     public Long getId() {
         return id;
@@ -103,11 +91,11 @@ public class Solicitacao {
         this.produto = produto;
     }
 
-    public EStatusSolicitacao getStatus() {
+    public StatusSolicitacao getStatus() {
         return status;
     }
 
-    public void setStatus(EStatusSolicitacao status) {
+    public void setStatus(StatusSolicitacao status) {
         this.status = status;
     }
 
@@ -127,47 +115,5 @@ public class Solicitacao {
         this.quantidadeAtendida = quantidadeAtendida;
     }
 
-    public LocalDateTime getDataCriacao() {
-        return this.dataCriacao;
-    }
 
-    public void setDataCriacao(LocalDateTime dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-
-    public LocalDateTime getDataMoficacao() {
-        return this.dataMoficacao;
-    }
-
-    public void setDataMoficacao(LocalDateTime dataMoficacao) {
-        this.dataMoficacao = dataMoficacao;
-    }
-
-    public String getCriadoPor() {
-        return this.criadoPor;
-    }
-
-    public void setCriadoPor(String criadoPor) {
-        this.criadoPor = criadoPor;
-    }
-
-    public String getModificadoPor() {
-        return this.modificadoPor;
-    }
-
-    public void setModificadoPor(String modificadoPor) {
-        this.modificadoPor = modificadoPor;
-    }
-
-    @Override
-    public String toString() {
-        return "Solicitacao{" +
-                "id=" + id +
-                ", estoquista=" + estoquista.getId() +
-                ", produto=" + produto.getNome() +
-                ", status=" + status +
-                ", quantidadeSolicitada=" + quantidadeSolicitada +
-                ", quantidadeAtendida=" + quantidadeAtendida +
-                '}';
-    }
 }

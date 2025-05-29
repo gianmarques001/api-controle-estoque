@@ -38,15 +38,15 @@ public class JwtUtils {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
     }
 
-    public static Date dataVencimento(Date dataInicio) {
+    public static Date dataExpiracao(Date dataInicio) {
         LocalDateTime data = dataInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         LocalDateTime dataFinal = data.plusDays(EXPIRE_DAYS).plusHours(EXPIRE_HOURS).plusMinutes(EXPIRE_MINUTES);
         return Date.from(dataFinal.atZone(ZoneId.systemDefault()).toInstant());
     }
 
-    public static JwtToken criarToken(String email, String perfil) {
+    public static JwtToken gerarToken(String email, String perfil) {
         Date issuedAt = new Date();
-        Date limit = dataVencimento(issuedAt);
+        Date limit = dataExpiracao(issuedAt);
         String token = Jwts.builder()
                 .subject(email)
                 .issuedAt(issuedAt)
@@ -75,7 +75,6 @@ public class JwtUtils {
         }
         return null;
     }
-
 
     public static String getEmailFromToken(String token) {
         return getClaimsFromToken(token).getSubject();

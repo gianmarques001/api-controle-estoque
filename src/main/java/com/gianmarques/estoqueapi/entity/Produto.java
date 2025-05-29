@@ -1,9 +1,7 @@
 package com.gianmarques.estoqueapi.entity;
 
-import com.gianmarques.estoqueapi.entity.enums.ECategoriaProduto;
+import com.gianmarques.estoqueapi.entity.enums.CategoriaProduto;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -35,7 +33,7 @@ public class Produto {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private ECategoriaProduto categoria;
+    private CategoriaProduto categoria;
 
 
     @ManyToOne
@@ -58,13 +56,10 @@ public class Produto {
     @Column(name = "modificado_por")
     private String modificadoPor;
 
-
-
-
     public Produto() {
     }
 
-    public Produto(Long id, String nome, String descricao, Float preco, Integer quantidade, ECategoriaProduto categoria, Fornecedor fornecedor) {
+    public Produto(Long id, String nome, String descricao, Float preco, Integer quantidade, CategoriaProduto categoria, Fornecedor fornecedor) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -74,7 +69,7 @@ public class Produto {
         this.fornecedor = fornecedor;
     }
 
-    public Produto(Long id, String nome, String descricao, Float preco, Integer quantidade, ECategoriaProduto categoria, Fornecedor fornecedor, LocalDateTime dataCriacao, LocalDateTime dataMoficacao, String criadoPor, String modificadoPor) {
+    public Produto(Long id, String nome, String descricao, Float preco, Integer quantidade, CategoriaProduto categoria, Fornecedor fornecedor, LocalDateTime dataCriacao, LocalDateTime dataMoficacao, String criadoPor, String modificadoPor) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -104,13 +99,6 @@ public class Produto {
         this.nome = nome;
     }
 
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
 
     public Float getPreco() {
         return preco;
@@ -128,12 +116,8 @@ public class Produto {
         this.quantidade = quantidade;
     }
 
-    public ECategoriaProduto getCategoria() {
+    public CategoriaProduto getCategoria() {
         return categoria;
-    }
-
-    public void setCategoria(ECategoriaProduto categoria) {
-        this.categoria = categoria;
     }
 
     public Fornecedor getFornecedor() {
@@ -144,47 +128,7 @@ public class Produto {
         this.fornecedor = fornecedor;
     }
 
-    public LocalDateTime getDataCriacao() {
-        return dataCriacao;
-    }
 
-    public void setDataCriacao(LocalDateTime dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
 
-    public LocalDateTime getDataMoficacao() {
-        return dataMoficacao;
-    }
 
-    public void setDataMoficacao(LocalDateTime dataMoficacao) {
-        this.dataMoficacao = dataMoficacao;
-    }
-
-    public String getCriadoPor() {
-        return criadoPor;
-    }
-
-    public void setCriadoPor(String criadoPor) {
-        this.criadoPor = criadoPor;
-    }
-
-    public String getModificadoPor() {
-        return modificadoPor;
-    }
-
-    public void setModificadoPor(String modificadoPor) {
-        this.modificadoPor = modificadoPor;
-    }
-
-    @Override
-    public String toString() {
-        return "Produto{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", descricao='" + descricao + '\'' +
-                ", preco=" + preco +
-                ", quantidade=" + quantidade +
-                ", categoria=" + categoria +
-                '}';
-    }
 }

@@ -1,37 +1,39 @@
 package com.gianmarques.estoqueapi.service;
 
 import com.gianmarques.estoqueapi.entity.Estoquista;
-import com.gianmarques.estoqueapi.entity.Usuario;
-import com.gianmarques.estoqueapi.entity.enums.ERole;
+import com.gianmarques.estoqueapi.entity.Permissao;
 import com.gianmarques.estoqueapi.exception.exceptions.EmailUnicoException;
 import com.gianmarques.estoqueapi.exception.exceptions.EntidadeNaoEncontradaException;
 import com.gianmarques.estoqueapi.repository.EstoquistaRepository;
-import com.gianmarques.estoqueapi.repository.UsuarioRepository;
+import com.gianmarques.estoqueapi.repository.PermissaoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
-public class EstoquistaService implements GenericService<Estoquista> {
+public class EstoquistaService {
 
     private final EstoquistaRepository estoquistaRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PermissaoRepository permissaoRepository;
 
 
-    public EstoquistaService(EstoquistaRepository estoquistaRepository, PasswordEncoder passwordEncoder) {
+    public EstoquistaService(EstoquistaRepository estoquistaRepository, PasswordEncoder passwordEncoder, PermissaoRepository permissaoRepository) {
         this.estoquistaRepository = estoquistaRepository;
         this.passwordEncoder = passwordEncoder;
-
+        this.permissaoRepository = permissaoRepository;
     }
 
-    @Override
+    @Transactional
     public Estoquista salvar(Estoquista estoquista) {
         try {
-            estoquista.setPerfil(ERole.ROLE_ESTOQUISTA);
+            Permissao roleEstoquista = permissaoRepository.findByNome("ROLE_ESTOQUISTA");
+            estoquista.setPerfil(Set.of(roleEstoquista));
             estoquista.setSenha(passwordEncoder.encode(estoquista.getSenha()));
             return estoquistaRepository.save(estoquista);
         } catch (DataIntegrityViolationException e) {
@@ -39,35 +41,16 @@ public class EstoquistaService implements GenericService<Estoquista> {
         }
     }
 
-    @Override
-    public List<Estoquista> listar(Long id) {
-        return List.of();
-    }
-
-    @Override
     public List<Estoquista> listar() {
         return estoquistaRepository.findAll();
     }
 
-
-
-    @Override
-    public Estoquista editarPorId(Long id, Estoquista estoquista) {
-        return null;
-    }
-
-    @Override
-    public Optional<Estoquista> buscarPorId(Long id) {
+    public Optional<Estoquista> buscar(Long id) {
         return Optional.ofNullable(estoquistaRepository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException("Estoquista não encontrado.")));
-
     }
 
-    @Override
     public void deletarPorId(Long id) {
-        buscarPorId(id).ifPresent(estoquistaRepository::delete);
+        buscar(id).ifPresent(estoquistaRepository::delete);
     }
 
-    public Estoquista buscarEmail(String username) {
-        return estoquistaRepository.findByEmail(username).orElse(null);
-    }
 }

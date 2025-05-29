@@ -8,5 +8,4 @@ public interface ProdutoProjection {
 
     String getCategoria();
 
-
 }

@@ -1,6 +1,6 @@
 package com.gianmarques.estoqueapi.dto.solicitacao;
 
-public class SolicitacaoPageableFornecedorResponseDTO {
+public class SolicitacaoFornecedorPageableResponseDTO {
 
     private Long idSolicitacao;
 
@@ -11,10 +11,10 @@ public class SolicitacaoPageableFornecedorResponseDTO {
     private String nomeEstoquista;
 
 
-    public SolicitacaoPageableFornecedorResponseDTO() {
+    public SolicitacaoFornecedorPageableResponseDTO() {
     }
 
-    public SolicitacaoPageableFornecedorResponseDTO(Long idSolicitacao, String nomeProduto, Integer quantidadeSolicitada, String nomeEstoquista) {
+    public SolicitacaoFornecedorPageableResponseDTO(Long idSolicitacao, String nomeProduto, Integer quantidadeSolicitada, String nomeEstoquista) {
         this.idSolicitacao = idSolicitacao;
         this.nomeProduto = nomeProduto;
         this.quantidadeSolicitada = quantidadeSolicitada;

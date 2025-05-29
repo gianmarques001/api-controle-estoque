@@ -23,22 +23,22 @@ public class GlobalHandlerException {
     }
 
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
-    public ResponseEntity<ErrorMessage> handleEmailUniqueException(EntidadeNaoEncontradaException e, HttpServletRequest request) {
+    public ResponseEntity<ErrorMessage> handleEntidadeNaoEncontradaException(EntidadeNaoEncontradaException e, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessage(request, HttpStatus.NOT_FOUND, e.getMessage()));
     }
 
     @ExceptionHandler(ProdutoDuplicadoException.class)
-    public ResponseEntity<ErrorMessage> handleEmailUniqueException(ProdutoDuplicadoException e, HttpServletRequest request) {
+    public ResponseEntity<ErrorMessage> handleProdutoDuplicadoException(ProdutoDuplicadoException e, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorMessage(request, HttpStatus.CONFLICT, e.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> handleMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest request, BindingResult result) {
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new ErrorMessage(request, HttpStatus.UNPROCESSABLE_ENTITY, "Alguns campos estão invalidos", result));
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new ErrorMessage(request, HttpStatus.UNPROCESSABLE_ENTITY, "Alguns campos estão invalidos", result));
     }
 
     @ExceptionHandler(LoginInvalidoException.class)
-    public ResponseEntity<ErrorMessage> handleMethodArgumentNotValidException(LoginInvalidoException e, HttpServletRequest request) {
+    public ResponseEntity<ErrorMessage> handleLoginInvalidoException(LoginInvalidoException e, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorMessage(request, HttpStatus.UNAUTHORIZED, e.getMessage()));
     }
 

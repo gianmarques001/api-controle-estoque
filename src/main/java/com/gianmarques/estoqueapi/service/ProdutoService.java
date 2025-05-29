@@ -5,7 +5,7 @@ import com.gianmarques.estoqueapi.entity.Produto;
 import com.gianmarques.estoqueapi.exception.exceptions.EntidadeNaoEncontradaException;
 import com.gianmarques.estoqueapi.exception.exceptions.ProdutoDuplicadoException;
 import com.gianmarques.estoqueapi.repository.ProdutoRepository;
-import com.gianmarques.estoqueapi.repository.projection.ProdutoListProjection;
+import com.gianmarques.estoqueapi.repository.projection.ProdutoPorFornecedorProjection;
 import com.gianmarques.estoqueapi.repository.projection.ProdutoProjection;
 import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Lazy;
@@ -29,52 +29,51 @@ public class ProdutoService {
         this.fornecedorService = fornecedorService;
     }
 
-    private List<Produto> getProdutosByFornecedor(Fornecedor fornecedor) {
+    private List<Produto> getProdutosPorFornecedor(Fornecedor fornecedor) {
         return produtoRepository.findByFornecedor(fornecedor);
     }
 
     private Fornecedor getFornecedor(Long id) {
-        Optional<Fornecedor> optionalFornecedor = fornecedorService.buscarPorId(id);
+        Optional<Fornecedor> optionalFornecedor = fornecedorService.buscar(id);
         return optionalFornecedor.get();
     }
 
-    public Produto salvar(Produto produto, Long idFornececdor) {
+    public Produto salvar(Long idFornececdor, Produto produto) {
         String categoriaProduto = produto.getCategoria().toString();
         Fornecedor fornecedor = getFornecedor(idFornececdor);
         produto.setFornecedor(fornecedor);
-        List<Produto> produtos = getProdutosByFornecedor(fornecedor);
+        List<Produto> produtos = getProdutosPorFornecedor(fornecedor);
 
         produtos.forEach(p -> {
             if (p.getCategoria().toString().equals(categoriaProduto) && p.getNome().equalsIgnoreCase(produto.getNome())) {
                 throw new ProdutoDuplicadoException("Produto Duplicado");
             }
         });
-
         return produtoRepository.save(produto);
     }
 
     public Page<ProdutoProjection> listar(Pageable pageable, Long id) {
         Fornecedor fornecedor = getFornecedor(id);
-        Page<ProdutoProjection> produtoByFornecedor = produtoRepository.findProdutoByFornecedor(pageable, fornecedor);
-        fornecedor.setProdutos(getProdutosByFornecedor(fornecedor));
-        return produtoByFornecedor;
+        Page<ProdutoProjection> produtosPorFornecedor = produtoRepository.findProdutoByFornecedor(pageable, fornecedor);
+        fornecedor.setProdutos(getProdutosPorFornecedor(fornecedor));
+        return produtosPorFornecedor;
     }
 
-    public Page<ProdutoListProjection> listar(Pageable pageable, Boolean emFalta) {
+    public Page<ProdutoPorFornecedorProjection> listar(Pageable pageable, Boolean emFalta) {
         if (emFalta != null) {
             return produtoRepository.findAllPageableByQuantidadeGreaterThanEqual(pageable, QTD_PRODUTOS);
         }
         return produtoRepository.findAllPageableEstoque(pageable);
     }
 
-    public Optional<Produto> buscarPorId(Long idProduto, Long idFornecedor) {
+    public Produto buscarPorId(Long idProduto, Long idFornecedor) {
         Fornecedor fornecedor = getFornecedor(idFornecedor);
-        List<Produto> produtos = getProdutosByFornecedor(fornecedor);
+        List<Produto> produtos = getProdutosPorFornecedor(fornecedor);
         Optional<Produto> optionalProduto = produtos.stream().filter(produto -> produto.getId() == idProduto).findFirst();
         if (optionalProduto.isEmpty()) {
             throw new EntidadeNaoEncontradaException("Produto não encontrado");
         }
-        return optionalProduto;
+        return optionalProduto.get();
     }
 
     public Produto buscarPorId(Long idProduto) {
@@ -86,15 +85,13 @@ public class ProdutoService {
     }
 
 
-
-    public Produto editarPorId(Long idProduto, Long idFornecedor, Produto novoProduto) {
-        Optional<Produto> optionalProduto = buscarPorId(idProduto, idFornecedor);
-        Produto produtoAtualizado = editarProduto(novoProduto, optionalProduto.get());
+    public Produto editar(Long idProduto, Long idFornecedor, Produto novoProduto) {
+        Produto produto = buscarPorId(idProduto, idFornecedor);
+        Produto produtoAtualizado = editarProduto(novoProduto, produto);
         return produtoRepository.save(produtoAtualizado);
     }
 
     private Produto editarProduto(Produto novoProduto, Produto antigoProduto) {
-        System.out.println("QTD Produto novo " + novoProduto.getQuantidade());
         antigoProduto.setQuantidade(novoProduto.getQuantidade());
         antigoProduto.setPreco(novoProduto.getPreco());
         return antigoProduto;
@@ -102,8 +99,9 @@ public class ProdutoService {
 
     @Transactional
     public void deletarPorId(Long idProduto, Long idFornecedor) {
-        Optional<Produto> optionalProduto = buscarPorId(idProduto, idFornecedor);
-        optionalProduto.ifPresent(produtoRepository::delete);
+        Produto produto = buscarPorId(idProduto, idFornecedor);
+        produtoRepository.delete(produto);
+
     }
 
 }

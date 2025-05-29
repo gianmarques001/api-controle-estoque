@@ -1,7 +1,6 @@
 package com.gianmarques.estoqueapi.entity;
 
 
-import com.gianmarques.estoqueapi.entity.enums.ERole;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -10,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 
 @Entity
@@ -22,22 +22,23 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @Column(nullable = false, length = 20)
     private String nome;
-
 
     @Column(nullable = false, unique = true)
     private String email;
 
-
     @Column(nullable = false, length = 70)
     private String senha;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private ERole perfil;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "tb_usuario_permissao",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "permissao_id")
+    )
+    private Set<Permissao> perfil;
 
     @CreatedDate
     @Column(name = "data_criacao")
@@ -66,23 +67,12 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public Usuario(Long id, String nome, String email, String senha, ERole perfil) {
+    public Usuario(Long id, String nome, String email, String senha, Set<Permissao> perfil) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
         this.perfil = perfil;
-    }
-
-    public Usuario(Long id, String nome, String email, String senha, LocalDateTime dataCriacao, LocalDateTime dataMoficacao, String criadoPor, String modificadoPor) {
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
-        this.senha = senha;
-        this.dataCriacao = dataCriacao;
-        this.dataMoficacao = dataMoficacao;
-        this.criadoPor = criadoPor;
-        this.modificadoPor = modificadoPor;
     }
 
     public String getNome() {
@@ -109,11 +99,11 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public ERole getPerfil() {
+    public Set<Permissao> getPerfil() {
         return perfil;
     }
 
-    public void setPerfil(ERole perfil) {
+    public void setPerfil(Set<Permissao> perfil) {
         this.perfil = perfil;
     }
 
@@ -126,46 +116,4 @@ public class Usuario {
     }
 
 
-    public LocalDateTime getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public void setDataCriacao(LocalDateTime dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-
-    public LocalDateTime getDataMoficacao() {
-        return dataMoficacao;
-    }
-
-    public void setDataMoficacao(LocalDateTime dataMoficacao) {
-        this.dataMoficacao = dataMoficacao;
-    }
-
-    public String getCriadoPor() {
-        return criadoPor;
-    }
-
-    public void setCriadoPor(String criadoPor) {
-        this.criadoPor = criadoPor;
-    }
-
-    public String getModificadoPor() {
-        return modificadoPor;
-    }
-
-    public void setModificadoPor(String modificadoPor) {
-        this.modificadoPor = modificadoPor;
-    }
-
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", email='" + email + '\'' +
-                ", senha='" + senha + '\'' +
-                ", perfil=" + perfil +
-                '}';
-    }
 }

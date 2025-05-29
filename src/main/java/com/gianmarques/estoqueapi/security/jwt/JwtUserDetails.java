@@ -1,7 +1,5 @@
 package com.gianmarques.estoqueapi.security.jwt;
 
-import com.gianmarques.estoqueapi.entity.Estoquista;
-import com.gianmarques.estoqueapi.entity.Fornecedor;
 import com.gianmarques.estoqueapi.entity.Usuario;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -18,25 +16,11 @@ public class JwtUserDetails implements UserDetails {
     private final String role;
 
 
-    public JwtUserDetails(Fornecedor fornecedor) {
-        this.id = fornecedor.getId();
-        this.email = fornecedor.getEmail();
-        this.senha = fornecedor.getSenha();
-        this.role = fornecedor.getPerfil().toString();
-    }
-
     public JwtUserDetails(Usuario usuario) {
         this.id = usuario.getId();
         this.email = usuario.getEmail();
         this.senha = usuario.getSenha();
-        this.role = usuario.getPerfil().toString();
-    }
-
-    public JwtUserDetails(Estoquista estoquista) {
-        this.id = estoquista.getId();
-        this.email = estoquista.getEmail();
-        this.senha = estoquista.getSenha();
-        this.role = estoquista.getPerfil().toString();
+        this.role = usuario.getPerfil().stream().findFirst().get().getNome();
     }
 
 

@@ -1,6 +1,6 @@
 package com.gianmarques.estoqueapi.entity.enums;
 
-public enum EStatusSolicitacao {
+public enum StatusSolicitacao {
     SOLICITADO,
     ATENDIDO,
     FINALIZADO;

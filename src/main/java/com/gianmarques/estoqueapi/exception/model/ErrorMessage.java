@@ -53,52 +53,14 @@ public class ErrorMessage {
 
     }
 
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
     public Integer getStatusCode() {
         return statusCode;
     }
 
-    public void setStatusCode(Integer statusCode) {
-        this.statusCode = statusCode;
-    }
-
-    public String getStatusText() {
-        return statusText;
-    }
-
-    public void setStatusText(String statusText) {
-        this.statusText = statusText;
-    }
 
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
-    public Map<String, String> getErrors() {
-        return errors;
-    }
-
-    public void setErrors(Map<String, String> errors) {
-        this.errors = errors;
-    }
 }
