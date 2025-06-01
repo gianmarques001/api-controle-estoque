@@ -63,4 +63,15 @@ public class GenericPageable<T> {
     }
 
 
+    public boolean isFirst() {
+        return first;
+    }
+
+    public boolean isLast() {
+        return last;
+    }
+
+    public int getNumber() {
+        return number;
+    }
 }

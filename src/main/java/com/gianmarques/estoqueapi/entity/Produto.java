@@ -128,7 +128,62 @@ public class Produto {
         this.fornecedor = fornecedor;
     }
 
+    public void setCategoria(CategoriaProduto categoria) {
+        this.categoria = categoria;
+    }
 
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDateTime dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
+
+    public LocalDateTime getDataMoficacao() {
+        return dataMoficacao;
+    }
+
+    public void setDataMoficacao(LocalDateTime dataMoficacao) {
+        this.dataMoficacao = dataMoficacao;
+    }
+
+    public String getCriadoPor() {
+        return criadoPor;
+    }
+
+    public void setCriadoPor(String criadoPor) {
+        this.criadoPor = criadoPor;
+    }
+
+    public String getModificadoPor() {
+        return modificadoPor;
+    }
+
+    public void setModificadoPor(String modificadoPor) {
+        this.modificadoPor = modificadoPor;
+    }
+
+    @Override
+    public String toString() {
+        return "Produto{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", preco=" + preco +
+                ", quantidade=" + quantidade +
+                ", categoria=" + categoria +
+                '}';
+    }
 
 
 }
